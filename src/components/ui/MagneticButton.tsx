@@ -49,10 +49,14 @@ export function MagneticButton({
       ? "px-9 py-4.5 text-base sm:text-lg"
       : "px-7 py-3.5 text-sm";
 
+  // Secondary uses an inset shadow rather than a border: a real border adds
+  // to the element's box height (border-box still grows by the border
+  // width), which threw it 2px out of vertical alignment with the
+  // borderless primary button when the two sit side by side.
   const styles =
     variant === "primary"
       ? "bg-accent text-void shadow-[0_0_0_0_rgba(61,139,255,0)] hover:shadow-[0_0_28px_4px_rgba(61,139,255,0.45)]"
-      : "border border-line text-foreground hover:border-accent-soft/70 hover:text-accent-soft";
+      : "text-foreground shadow-[inset_0_0_0_1px_var(--color-line)] hover:text-accent-soft hover:shadow-[inset_0_0_0_1px_rgba(125,179,255,0.7)]";
 
   const content = (
     <>
@@ -89,7 +93,7 @@ export function MagneticButton({
       href={href}
       onPointerMove={handlePointerMove}
       onPointerLeave={handlePointerLeave}
-      className={cn(base, styles, className)}
+      className={cn(base, sizes, styles, className)}
       data-cursor="interactive"
     >
       {content}
