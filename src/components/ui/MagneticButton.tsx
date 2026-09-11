@@ -1,0 +1,91 @@
+"use client";
+
+import Link from "next/link";
+import { useRef } from "react";
+import { cn } from "@/lib/utils/cn";
+import { useIsCoarsePointer } from "@/lib/hooks/useMediaQuery";
+import { useReducedMotion } from "@/lib/hooks/useReducedMotion";
+
+type MagneticButtonProps = {
+  href: string;
+  children: React.ReactNode;
+  variant?: "primary" | "secondary";
+  className?: string;
+  external?: boolean;
+};
+
+export function MagneticButton({
+  href,
+  children,
+  variant = "primary",
+  className,
+  external,
+}: MagneticButtonProps) {
+  const ref = useRef<HTMLAnchorElement>(null);
+  const isCoarse = useIsCoarsePointer();
+  const reducedMotion = useReducedMotion();
+  const disableMagnetism = isCoarse || reducedMotion;
+
+  const handlePointerMove = (event: React.PointerEvent<HTMLAnchorElement>) => {
+    if (disableMagnetism || !ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    const x = event.clientX - rect.left - rect.width / 2;
+    const y = event.clientY - rect.top - rect.height / 2;
+    ref.current.style.transform = `translate(${x * 0.25}px, ${y * 0.35}px)`;
+  };
+
+  const handlePointerLeave = () => {
+    if (!ref.current) return;
+    ref.current.style.transform = "translate(0, 0)";
+  };
+
+  const base =
+    "group relative inline-flex items-center gap-2.5 rounded-full px-7 py-3.5 text-sm font-semibold tracking-tight transition-[transform,box-shadow,background-color] duration-300 ease-out will-change-transform min-h-11";
+
+  const styles =
+    variant === "primary"
+      ? "bg-accent text-void shadow-[0_0_0_0_rgba(61,139,255,0)] hover:shadow-[0_0_28px_4px_rgba(61,139,255,0.45)]"
+      : "border border-line text-foreground hover:border-accent-soft/70 hover:text-accent-soft";
+
+  const content = (
+    <>
+      <span>{children}</span>
+      <span
+        aria-hidden="true"
+        className="inline-block transition-transform duration-300 ease-out group-hover:translate-x-1"
+      >
+        →
+      </span>
+    </>
+  );
+
+  if (external) {
+    return (
+      <a
+        ref={ref}
+        href={href}
+        target="_blank"
+        rel="noopener noreferrer"
+        onPointerMove={handlePointerMove}
+        onPointerLeave={handlePointerLeave}
+        className={cn(base, styles, className)}
+        data-cursor="interactive"
+      >
+        {content}
+      </a>
+    );
+  }
+
+  return (
+    <Link
+      ref={ref}
+      href={href}
+      onPointerMove={handlePointerMove}
+      onPointerLeave={handlePointerLeave}
+      className={cn(base, styles, className)}
+      data-cursor="interactive"
+    >
+      {content}
+    </Link>
+  );
+}
