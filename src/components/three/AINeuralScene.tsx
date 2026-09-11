@@ -23,11 +23,13 @@ function buildLayers(mobile: boolean): Vec3[][] {
 }
 
 /** A restrained, layered node diagram — an engineered nod to neural
- * architecture, not a cyberpunk cliché. Ambient only; nothing here reacts
- * to scroll, so it stays lightweight. */
+ * architecture, not a cyberpunk cliché. Nodes carry a slow, phase-shifted
+ * pulse (data moving through the system) and connections breathe gently;
+ * nothing here reacts to scroll, so it stays lightweight. */
 function NeuralNet({ mobile }: { mobile: boolean }) {
   const groupRef = useRef<THREE.Group>(null);
   const lineMatRef = useRef<THREE.LineBasicMaterial>(null);
+  const nodeRefs = useRef<(THREE.Mesh | null)[]>([]);
   const reducedMotion = useReducedMotion();
 
   const layers = useMemo(() => buildLayers(mobile), [mobile]);
@@ -49,19 +51,33 @@ function NeuralNet({ mobile }: { mobile: boolean }) {
 
   useFrame(({ clock }) => {
     if (reducedMotion) return;
+    const t = clock.elapsedTime;
+
     if (groupRef.current) {
-      groupRef.current.rotation.y = Math.sin(clock.elapsedTime * 0.15) * 0.3;
-      groupRef.current.rotation.x = Math.cos(clock.elapsedTime * 0.1) * 0.1;
+      groupRef.current.rotation.y = Math.sin(t * 0.15) * 0.3;
+      groupRef.current.rotation.x = Math.cos(t * 0.1) * 0.1;
     }
     if (lineMatRef.current) {
-      lineMatRef.current.opacity = 0.18 + 0.15 * (0.5 + 0.5 * Math.sin(clock.elapsedTime * 0.6));
+      lineMatRef.current.opacity = 0.18 + 0.15 * (0.5 + 0.5 * Math.sin(t * 0.6));
     }
+    nodeRefs.current.forEach((mesh, i) => {
+      if (!mesh) return;
+      const phase = i * 0.45;
+      const scale = 1 + Math.sin(t * 1.1 + phase) * 0.16;
+      mesh.scale.setScalar(scale);
+    });
   });
 
   return (
     <group ref={groupRef}>
       {nodes.map((pos, i) => (
-        <mesh key={i} position={pos}>
+        <mesh
+          key={i}
+          position={pos}
+          ref={(el) => {
+            nodeRefs.current[i] = el;
+          }}
+        >
           <sphereGeometry args={[0.045, 8, 8]} />
           <meshBasicMaterial color="#7fb3ff" transparent opacity={0.9} />
         </mesh>

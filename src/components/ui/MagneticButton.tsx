@@ -10,6 +10,7 @@ type MagneticButtonProps = {
   href: string;
   children: React.ReactNode;
   variant?: "primary" | "secondary";
+  size?: "md" | "lg";
   className?: string;
   external?: boolean;
 };
@@ -18,6 +19,7 @@ export function MagneticButton({
   href,
   children,
   variant = "primary",
+  size = "md",
   className,
   external,
 }: MagneticButtonProps) {
@@ -40,7 +42,12 @@ export function MagneticButton({
   };
 
   const base =
-    "group relative inline-flex items-center gap-2.5 rounded-full px-7 py-3.5 text-sm font-semibold tracking-tight transition-[transform,box-shadow,background-color] duration-300 ease-out will-change-transform min-h-11";
+    "group relative inline-flex items-center gap-2.5 rounded-full font-semibold tracking-tight transition-[transform,box-shadow,background-color] duration-300 ease-out will-change-transform min-h-11";
+
+  const sizes =
+    size === "lg"
+      ? "px-9 py-4.5 text-base sm:text-lg"
+      : "px-7 py-3.5 text-sm";
 
   const styles =
     variant === "primary"
@@ -68,7 +75,7 @@ export function MagneticButton({
         rel="noopener noreferrer"
         onPointerMove={handlePointerMove}
         onPointerLeave={handlePointerLeave}
-        className={cn(base, styles, className)}
+        className={cn(base, sizes, styles, className)}
         data-cursor="interactive"
       >
         {content}

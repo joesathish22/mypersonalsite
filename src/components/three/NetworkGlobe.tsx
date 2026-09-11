@@ -108,7 +108,72 @@ export function NetworkGlobe({
           opacity={0.28}
         />
       ))}
+
+      <SignalPulses nodes={nodes} connections={connections} color={color} />
     </group>
+  );
+}
+
+/**
+ * A handful of small points of light traveling along a subset of the
+ * connections — reads as data moving through the network ("connection
+ * activity" / "light propagation") rather than a static wireframe.
+ */
+function SignalPulses({
+  nodes,
+  connections,
+  color,
+}: {
+  nodes: [number, number, number][];
+  connections: [number, number][];
+  color: string;
+}) {
+  const pulseRefs = useRef<(THREE.Mesh | null)[]>([]);
+  const reducedMotion = useReducedMotion();
+  const activePulses = useMemo(() => connections.slice(0, Math.min(7, connections.length)), [connections]);
+
+  useFrame(({ clock }) => {
+    if (reducedMotion) return;
+    const speed = 0.14;
+
+    activePulses.forEach(([a, b], i) => {
+      const mesh = pulseRefs.current[i];
+      if (!mesh) return;
+
+      const t = (clock.elapsedTime * speed + i * 0.31) % 1;
+      const p0 = nodes[a];
+      const p2 = nodes[b];
+      const mid = midpointBulge(p0, p2);
+      const mt = 1 - t;
+      const wa = mt * mt, wb = 2 * mt * t, wc = t * t;
+
+      mesh.position.set(
+        wa * p0[0] + wb * mid[0] + wc * p2[0],
+        wa * p0[1] + wb * mid[1] + wc * p2[1],
+        wa * p0[2] + wb * mid[2] + wc * p2[2]
+      );
+
+      const material = mesh.material as THREE.MeshBasicMaterial;
+      material.opacity = Math.sin(t * Math.PI) * 0.9;
+    });
+  });
+
+  if (reducedMotion) return null;
+
+  return (
+    <>
+      {activePulses.map((_, i) => (
+        <mesh
+          key={i}
+          ref={(el) => {
+            pulseRefs.current[i] = el;
+          }}
+        >
+          <sphereGeometry args={[0.03, 6, 6]} />
+          <meshBasicMaterial color={color} transparent opacity={0} />
+        </mesh>
+      ))}
+    </>
   );
 }
 

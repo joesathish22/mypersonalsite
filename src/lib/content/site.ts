@@ -5,6 +5,9 @@ export const person = {
   name: "S. Sathish Kumar",
   shortName: "Sathish Kumar",
   alias: "Joe",
+  // For structured data / entity references specifically (schema.org
+  // alternateName) — kept distinct from the casual "(Joe)" used in prose.
+  alternateName: "Joe Sathish",
   role: "Founder & CEO",
   company: "Queen Touch Technology",
   companyShort: "QTT",
@@ -21,7 +24,7 @@ export const person = {
   qttUrl: "https://www.queentouchtech.com",
   portrait: {
     src: "/images/sathish-kumar.png",
-    alt: "Portrait of S. Sathish Kumar, Founder & CEO of Queen Touch Technology",
+    alt: "S. Sathish Kumar, Founder & CEO of Queen Touch Technology",
   },
 } as const;
 
@@ -104,6 +107,7 @@ export const aiReady = {
   eyebrow: "AI-Ready Technology",
   heading: "Exploring What Intelligent Systems Make Possible",
   text: "Exploring how intelligent systems, automation and modern AI can transform the way organizations build, operate and grow.",
+  flow: ["Data", "Intelligence", "Automation", "Systems"],
 } as const;
 
 export const about = {

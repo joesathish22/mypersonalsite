@@ -14,6 +14,7 @@ import { createFresnelMaterial } from "@/lib/three/shaders/fresnel";
 import { useReducedMotion } from "@/lib/hooks/useReducedMotion";
 import { useIsMobile } from "@/lib/hooks/useMediaQuery";
 import { getSceneQuality } from "@/lib/three/quality";
+import { Particles } from "./Particles";
 
 const CURVE_SEGMENTS = 14;
 const TRANSITIONS = stageLayouts.length - 1;
@@ -43,6 +44,18 @@ function TechUniverseCore({ progressRef, count, connectionCount }: TechUniverseC
   const groupRef = useRef<THREE.Group>(null);
   const dummy = useMemo(() => new THREE.Object3D(), []);
   const reducedMotion = useReducedMotion();
+  const pointer = useRef({ x: 0, y: 0 });
+  const tilt = useRef({ x: 0, y: 0 });
+
+  useEffect(() => {
+    const onMove = (event: PointerEvent) => {
+      if (event.pointerType !== "mouse") return;
+      pointer.current.x = (event.clientX / window.innerWidth) * 2 - 1;
+      pointer.current.y = (event.clientY / window.innerHeight) * 2 - 1;
+    };
+    window.addEventListener("pointermove", onMove, { passive: true });
+    return () => window.removeEventListener("pointermove", onMove);
+  }, []);
 
   // A ref (not useMemo) — its uniform is mutated every frame below, and refs
   // are the sanctioned mutable escape hatch for that in React's eyes.
@@ -85,7 +98,7 @@ function TechUniverseCore({ progressRef, count, connectionCount }: TechUniverseC
 
   // Priority -1: this must run before any other useFrame in the tree so the
   // position buffer is current when nothing downstream reads it this frame.
-  useFrame(({ camera }) => {
+  useFrame(({ camera, clock }) => {
     const { index, frac } = getMorphSegment(progressRef.current ?? 0, TRANSITIONS);
     const from = layouts[index];
     const to = layouts[index + 1] ?? layouts[index];
@@ -101,8 +114,13 @@ function TechUniverseCore({ progressRef, count, connectionCount }: TechUniverseC
 
     const mesh = nodeMeshRef.current;
     if (mesh) {
+      const t = clock.elapsedTime;
       for (let i = 0; i < count; i++) {
         dummy.position.set(buf[i * 3], buf[i * 3 + 1], buf[i * 3 + 2]);
+        // A restrained per-node pulse — reads as quiet system activity
+        // rather than a uniform, mechanical throb.
+        const pulse = reducedMotion ? 1 : 1 + Math.sin(t * 1.6 + i * 0.6) * 0.14;
+        dummy.scale.setScalar(pulse);
         dummy.updateMatrix();
         mesh.setMatrixAt(i, dummy.matrix);
       }
@@ -152,6 +170,11 @@ function TechUniverseCore({ progressRef, count, connectionCount }: TechUniverseC
 
     if (!reducedMotion && groupRef.current) {
       groupRef.current.rotation.y += 0.0008;
+
+      tilt.current.x = THREE.MathUtils.lerp(tilt.current.x, pointer.current.y * 0.08, 0.04);
+      tilt.current.y = THREE.MathUtils.lerp(tilt.current.y, pointer.current.x * 0.08, 0.04);
+      groupRef.current.rotation.x = tilt.current.x;
+      groupRef.current.rotation.z = tilt.current.y * 0.4;
     }
   }, -1);
 
@@ -191,6 +214,7 @@ export function TechUniverseScene({
       fallback={<TechUniverseFallback />}
     >
       <fog attach="fog" args={["#07111f", 4, 9]} />
+      <Particles count={Math.round(quality.particleCount * 0.5)} spread={4.5} driftSpeed={0.008} />
       <TechUniverseCore
         progressRef={progressRef}
         count={quality.nodeCount}

@@ -29,7 +29,9 @@ export function Contact() {
           </RevealText>
 
           <RevealText delay={0.15} className="mt-10">
-            <MagneticButton href={contact.cta.href}>{contact.cta.label}</MagneticButton>
+            <MagneticButton href={contact.cta.href} size="lg">
+              {contact.cta.label}
+            </MagneticButton>
           </RevealText>
         </div>
 

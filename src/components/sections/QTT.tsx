@@ -61,16 +61,18 @@ export function QTTSection() {
           </div>
 
           <RevealText delay={0.15}>
-            <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              {qtt.areas.map((area) => (
-                <li
-                  key={area}
-                  className="rounded-xl border border-line bg-void/40 px-5 py-4 text-sm font-medium text-foreground"
-                >
-                  {area}
+            <ol className="divide-y divide-line/60 border-y border-line/60">
+              {qtt.areas.map((area, index) => (
+                <li key={area} className="flex items-baseline gap-6 py-5">
+                  <span className="text-xs font-medium tabular-nums text-muted-dim">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <span className="text-base font-medium text-foreground sm:text-lg">
+                    {area}
+                  </span>
                 </li>
               ))}
-            </ul>
+            </ol>
           </RevealText>
         </div>
       </div>

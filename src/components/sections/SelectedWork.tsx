@@ -2,6 +2,14 @@ import { selectedWork } from "@/lib/content/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { TiltCard } from "@/components/ui/TiltCard";
 import { RevealText } from "@/components/ui/RevealText";
+import {
+  EnterpriseDiagram,
+  MobileDiagram,
+  CloudDiagram,
+  TransformDiagram,
+} from "@/components/ui/WorkDiagrams";
+
+const diagrams = [EnterpriseDiagram, MobileDiagram, CloudDiagram, TransformDiagram];
 
 export function SelectedWork() {
   return (
@@ -19,33 +27,39 @@ export function SelectedWork() {
         </RevealText>
 
         <ul className="mt-16 grid grid-cols-1 gap-4 sm:grid-cols-2">
-          {selectedWork.showcases.map((showcase, index) => (
-            <li key={showcase.domain}>
-              <RevealText delay={(index % 4) * 0.06} className="h-full">
-                <TiltCard className="h-full p-8">
-                  <span className="text-xs font-medium text-muted-dim">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                  <h3 className="mt-6 text-xl font-semibold leading-snug text-foreground">
-                    {showcase.domain}
-                  </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-muted">
-                    {showcase.description}
-                  </p>
-                  <ul className="mt-6 flex flex-wrap gap-2">
-                    {showcase.technologies.map((tech) => (
-                      <li
-                        key={tech}
-                        className="rounded-full border border-line px-3 py-1 text-xs text-muted-dim"
-                      >
-                        {tech}
-                      </li>
-                    ))}
-                  </ul>
-                </TiltCard>
-              </RevealText>
-            </li>
-          ))}
+          {selectedWork.showcases.map((showcase, index) => {
+            const Diagram = diagrams[index % diagrams.length];
+            return (
+              <li key={showcase.domain}>
+                <RevealText delay={(index % 4) * 0.06} className="h-full">
+                  <TiltCard className="h-full p-8">
+                    <div className="flex items-start justify-between">
+                      <span className="text-xs font-medium text-muted-dim">
+                        {String(index + 1).padStart(2, "0")}
+                      </span>
+                      <Diagram className="h-11 w-11 text-accent-soft/80" />
+                    </div>
+                    <h3 className="mt-6 text-xl font-semibold leading-snug text-foreground">
+                      {showcase.domain}
+                    </h3>
+                    <p className="mt-3 text-sm leading-relaxed text-muted">
+                      {showcase.description}
+                    </p>
+                    <ul className="mt-6 flex flex-wrap gap-2">
+                      {showcase.technologies.map((tech) => (
+                        <li
+                          key={tech}
+                          className="rounded-full border border-line px-3 py-1 text-xs text-muted-dim"
+                        >
+                          {tech}
+                        </li>
+                      ))}
+                    </ul>
+                  </TiltCard>
+                </RevealText>
+              </li>
+            );
+          })}
         </ul>
       </div>
     </section>
