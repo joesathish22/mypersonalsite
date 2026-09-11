@@ -37,37 +37,78 @@ function PinnedTechJourney() {
     () => {
       if (!sectionRef.current) return;
 
-      // One screen-height of scroll per transition — ties the pin's scroll
-      // runway directly to TRANSITIONS, the same number driving the morph.
-      const scrollDistance = `+=${TRANSITIONS * 100}%`;
+      let trigger: ScrollTrigger | undefined;
+      let cancelled = false;
 
-      const trigger = ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: "top top",
-        end: scrollDistance,
-        pin: true,
-        scrub: 0.6,
-        anticipatePin: 1,
-        onUpdate: (self) => {
-          progressRef.current = self.progress;
+      // The pin's start/end positions are measured from live layout. If that
+      // measurement happens before the web font has swapped in (next/font's
+      // `display: swap` renders a fallback font first, then swaps — shifting
+      // text metrics and therefore section height), ScrollTrigger bakes in
+      // stale coordinates. The pinned section can then render mid-transition
+      // — including an unstyled/blank-looking frame — until the *next*
+      // scroll-driven update happens to correct it, which is exactly the
+      // "scrolling immediately fixes it" symptom. Waiting for fonts (and one
+      // more frame for layout to settle) before measuring avoids that.
+      const setup = () => {
+        if (cancelled || !sectionRef.current) return;
 
-          const { index, frac } = getMorphSegment(self.progress, TRANSITIONS);
-          // Outgoing caption fades fast, incoming fades in late — leaving a
-          // brief clean gap where neither overlaps and the shape morph reads
-          // on its own, instead of two captions double-exposed mid-scroll.
-          captionRefs.current.forEach((el, i) => {
-            if (!el) return;
-            let opacity = 0;
-            if (i === index) opacity = 1 - smoothstep(0, 0.32, frac);
-            else if (i === index + 1) opacity = smoothstep(0.68, 1, frac);
-            el.style.opacity = String(opacity);
-            el.style.transform = `translateY(${(1 - opacity) * 18}px)`;
-            el.style.pointerEvents = opacity > 0.5 ? "auto" : "none";
-          });
-        },
-      });
+        // One screen-height of scroll per transition — ties the pin's
+        // scroll runway directly to TRANSITIONS, the same number driving
+        // the morph.
+        const scrollDistance = `+=${TRANSITIONS * 100}%`;
 
-      return () => trigger.kill();
+        trigger = ScrollTrigger.create({
+          trigger: sectionRef.current,
+          start: "top top",
+          end: scrollDistance,
+          pin: true,
+          scrub: 0.6,
+          anticipatePin: 1,
+          onUpdate: (self) => {
+            progressRef.current = self.progress;
+
+            const { index, frac } = getMorphSegment(self.progress, TRANSITIONS);
+            // Outgoing caption fades fast, incoming fades in late — leaving
+            // a brief clean gap where neither overlaps and the shape morph
+            // reads on its own, instead of two captions double-exposed
+            // mid-scroll.
+            captionRefs.current.forEach((el, i) => {
+              if (!el) return;
+              let opacity = 0;
+              if (i === index) opacity = 1 - smoothstep(0, 0.32, frac);
+              else if (i === index + 1) opacity = smoothstep(0.68, 1, frac);
+              el.style.opacity = String(opacity);
+              el.style.transform = `translateY(${(1 - opacity) * 18}px)`;
+              el.style.pointerEvents = opacity > 0.5 ? "auto" : "none";
+            });
+          },
+        });
+
+        // Fonts may still cause a late layout shift after this trigger is
+        // created (e.g. a slow connection finishing the swap after
+        // `fonts.ready` already resolved once for an earlier section) — one
+        // more refresh once the whole page has finished loading catches it.
+        const onLoad = () => ScrollTrigger.refresh();
+        if (document.readyState === "complete") {
+          ScrollTrigger.refresh();
+        } else {
+          window.addEventListener("load", onLoad, { once: true });
+        }
+      };
+
+      const fontsReady = (document as Document & { fonts?: { ready: Promise<unknown> } }).fonts
+        ?.ready;
+
+      if (fontsReady) {
+        fontsReady.then(() => requestAnimationFrame(setup));
+      } else {
+        requestAnimationFrame(setup);
+      }
+
+      return () => {
+        cancelled = true;
+        trigger?.kill();
+      };
     },
     { scope: sectionRef }
   );
@@ -77,6 +118,10 @@ function PinnedTechJourney() {
       id="capabilities"
       ref={sectionRef}
       className="relative h-screen overflow-hidden bg-deep"
+      // Belt-and-suspenders: an inline style applies immediately with the
+      // server-rendered HTML, with no dependency on the stylesheet having
+      // loaded/parsed yet — guarantees this never paints as unstyled white.
+      style={{ backgroundColor: "#07111f" }}
     >
       <div className="absolute inset-0">
         <TechUniverseScene progressRef={progressRef} className="h-full w-full" />

@@ -4,10 +4,6 @@
 export const person = {
   name: "S. Sathish Kumar",
   shortName: "Sathish Kumar",
-  alias: "Joe",
-  // For structured data / entity references specifically (schema.org
-  // alternateName) — kept distinct from the casual "(Joe)" used in prose.
-  alternateName: "Joe Sathish",
   role: "Founder & CEO",
   company: "Queen Touch Technology",
   companyShort: "QTT",
@@ -117,7 +113,7 @@ export const about = {
     "When It Creates Real Impact.",
   ],
   paragraphs: [
-    "I am S. Sathish Kumar (Joe), Founder & CEO of Queen Touch Technology, an IT and digital solutions company based in India.",
+    "I am S. Sathish Kumar, Founder & CEO of Queen Touch Technology, an IT and digital solutions company based in India.",
     "With over a decade of experience in IT projects, enterprise software and digital transformation, I combine strategic thinking with hands-on technology leadership.",
   ],
 } as const;

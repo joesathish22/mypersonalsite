@@ -16,7 +16,7 @@ const jakarta = Plus_Jakarta_Sans({
 
 const TITLE = "S. Sathish Kumar — Founder, Technology Strategist & Builder";
 const DESCRIPTION =
-  "S. Sathish Kumar (Joe), Founder & CEO of Queen Touch Technology, building scalable digital products, enterprise technology and digital transformation solutions for organizations worldwide.";
+  "S. Sathish Kumar, Founder & CEO of Queen Touch Technology, building scalable digital products, enterprise technology and digital transformation solutions for organizations worldwide.";
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -103,7 +103,6 @@ const jsonLdGraph = {
       "@type": "Person",
       "@id": personId,
       name: person.name,
-      alternateName: person.alternateName,
       jobTitle: person.role,
       description: DESCRIPTION,
       url: SITE_URL,

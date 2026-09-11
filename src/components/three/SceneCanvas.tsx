@@ -28,6 +28,10 @@ type SceneCanvasProps = {
  *   Mounted-but-not-visible sections sit idle (frameloop: "never") so they
  *   don't spend frame budget while still being ready the instant they're
  *   scrolled into place.
+ *
+ * The canvas itself stays at opacity 0 until a frame has actually been
+ * drawn (one tick after `onCreated`), then fades in — so a freshly created
+ * WebGL context can never be visible mid-initialization.
  */
 export function SceneCanvas({
   children,
@@ -45,6 +49,7 @@ export function SceneCanvas({
   const [mounted, setMounted] = useState(false);
   const [inView, setInView] = useState(false);
   const [tabVisible, setTabVisible] = useState(true);
+  const [ready, setReady] = useState(false);
   const isMobile = useIsMobile();
   const quality = getSceneQuality(isMobile);
 
@@ -53,7 +58,13 @@ export function SceneCanvas({
     if (!node) return;
 
     const mountObserver = new IntersectionObserver(
-      ([entry]) => setMounted(entry.isIntersecting),
+      ([entry]) => {
+        setMounted(entry.isIntersecting);
+        // Reset on unmount so a later remount starts hidden again — `ready`
+        // otherwise carries over stale from the previous Canvas instance
+        // and would reveal the new one's uninitialized first frame.
+        if (!entry.isIntersecting) setReady(false);
+      },
       { rootMargin: "75% 0px 75% 0px", threshold: 0 }
     );
     const viewObserver = new IntersectionObserver(
@@ -89,6 +100,12 @@ export function SceneCanvas({
           gl={{ antialias: true, alpha: true, powerPreference: "high-performance" }}
           camera={{ position: cameraPosition, fov }}
           frameloop={inView && tabVisible ? "always" : "never"}
+          onCreated={() => {
+            // One extra tick past context creation so the first real draw
+            // call has actually happened before this is allowed to show.
+            requestAnimationFrame(() => setReady(true));
+          }}
+          style={{ opacity: ready ? 1 : 0, transition: "opacity 0.5s ease-out" }}
         >
           {children}
         </Canvas>

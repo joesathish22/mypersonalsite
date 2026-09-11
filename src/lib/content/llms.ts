@@ -19,12 +19,11 @@ import { SITE_URL } from "@/lib/config/site-config";
 export function buildLlmsTxt(): string {
   return `# ${person.name}
 
-> ${person.name} (${person.alias}) is the ${person.role} of ${person.company} (${person.companyShort}), an IT and digital solutions company based in ${person.location}. He is a technology strategist and builder with ${person.experience} of experience in enterprise software, digital transformation and technology solutions. He is open to global remote collaboration.
+> ${person.name} is the ${person.role} of ${person.company} (${person.companyShort}), an IT and digital solutions company based in ${person.location}. He is a technology strategist and builder with ${person.experience} of experience in enterprise software, digital transformation and technology solutions. He is open to global remote collaboration.
 
 ## Identity
 
 - Name: ${person.name}
-- Alternate name: ${person.alternateName}
 - Role: ${person.role}
 - Company: ${person.company} (${person.companyShort})
 - Location: ${person.location}
@@ -81,7 +80,6 @@ export function buildLlmsFullTxt(): string {
 ## Identity
 
 - Name: ${person.name}
-- Alternate name: ${person.alternateName}
 - Role: ${person.role}
 - Company: ${person.company} (${person.companyShort})
 - Location: ${person.location}
