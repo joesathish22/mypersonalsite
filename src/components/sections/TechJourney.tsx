@@ -130,9 +130,16 @@ function PinnedTechJourney() {
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 bg-gradient-to-t from-deep via-transparent to-deep/50"
       />
+      {/* Protected content zone: a left-side scrim keeps the caption's
+          contrast solid regardless of what the network is doing behind it —
+          text stays the anchor, the 3D never has to compete with it. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-y-0 left-0 w-[46%] bg-gradient-to-r from-deep via-deep/75 to-transparent"
+      />
 
       <div className="container-page relative flex h-full items-center">
-        <div className="relative w-full max-w-xl">
+        <div className="relative w-full max-w-lg">
           {techJourney.stages.map((stage, i) => (
             <div
               key={stage.key}
@@ -149,14 +156,14 @@ function PinnedTechJourney() {
               <h3 className="mt-4 text-5xl font-bold tracking-tight text-foreground sm:text-6xl">
                 {stage.label}
               </h3>
-              <p className="mt-5 max-w-md text-balance text-lg leading-relaxed text-muted">
+              <p className="mt-5 max-w-md text-balance text-lg leading-relaxed text-foreground/80">
                 {stage.description}
               </p>
               <ul className="mt-7 flex flex-wrap gap-2">
                 {stage.items.map((item) => (
                   <li
                     key={item}
-                    className="rounded-full border border-line px-3.5 py-1.5 text-xs text-muted"
+                    className="rounded-full border border-line/80 bg-void/50 px-3.5 py-1.5 text-xs font-medium text-foreground/90 backdrop-blur-sm"
                   >
                     {item}
                   </li>

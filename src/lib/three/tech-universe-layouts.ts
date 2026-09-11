@@ -14,7 +14,11 @@ function mulberry32(seed: number) {
   };
 }
 
-/** Stage 1 — Strategy: an abstract architectural grid, mapped flat. */
+/**
+ * Stage 1 — Strategy: an abstract architectural grid, mapped almost flat.
+ * Minimal jitter (a precise blueprint, not a scattered field) — the point
+ * is a sense of deliberate alignment, chaos already resolved into a plan.
+ */
 export function strategyLayout(count: number): Vec3[] {
   const cols = Math.ceil(Math.sqrt(count));
   const rows = Math.ceil(count / cols);
@@ -26,7 +30,7 @@ export function strategyLayout(count: number): Vec3[] {
     const row = Math.floor(i / cols);
     const x = (col - (cols - 1) / 2) * 0.95;
     const y = (row - (rows - 1) / 2) * 0.85;
-    const z = (seeded() - 0.5) * 0.4;
+    const z = (seeded() - 0.5) * 0.12;
     points.push([x, y, z]);
   }
 
@@ -53,7 +57,7 @@ export function buildLayout(count: number): Vec3[] {
 
 /** Stage 3 — Scale: the network expands — more spread, more reach. */
 export function scaleLayout(count: number): Vec3[] {
-  return fibonacciSphere(count, 2.35);
+  return fibonacciSphere(count, 2.7);
 }
 
 /** Stage 4 — Protect: the network contracts inward, ready to be shielded. */
@@ -64,11 +68,19 @@ export function protectLayout(count: number): Vec3[] {
 export const stageLayouts = [strategyLayout, buildLayout, scaleLayout, protectLayout];
 
 export const stageCameraPositions: Vec3[] = [
-  [0, 0.15, 4.4],
-  [0.35, 0.35, 4.1],
-  [0, 0, 5.6],
-  [0, 0, 3.3],
+  [0, 0.15, 4.6],
+  [0.1, 0.35, 4.2],
+  [0, 0, 6.2],
+  [0, 0, 3.6],
 ];
+
+/**
+ * How visually "active" the connections look per stage — same edges
+ * throughout, just dimmer where the story calls for calm (Strategy's quiet
+ * blueprint, Protect's focus on the shield) and brighter where it calls for
+ * momentum (Scale's expansion).
+ */
+export const stageConnectionActivity = [0.45, 0.65, 1, 0.32];
 
 /**
  * Maps overall scroll progress (0..1) to a {index, frac} pair across N
