@@ -102,7 +102,7 @@ export const techJourney = {
 export const aiReady = {
   eyebrow: "AI-Ready Technology",
   heading: "Exploring What Intelligent Systems Make Possible",
-  text: "Exploring how intelligent systems, automation and modern AI can transform the way organizations build, operate and grow.",
+  text: "Intelligent systems, automation and modern AI are changing how organizations build, operate and grow.",
   flow: ["Data", "Intelligence", "Automation", "Systems"],
 } as const;
 
