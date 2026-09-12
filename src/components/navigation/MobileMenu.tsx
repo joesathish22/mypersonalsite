@@ -100,7 +100,7 @@ export function MobileMenu({ open, onClose }: MobileMenuProps) {
       </nav>
 
       <div className="container-page flex flex-col gap-4 pb-10">
-        <MagneticButton href="#contact" className="w-full justify-center" >
+        <MagneticButton href="/contact" className="w-full justify-center" >
           Let&apos;s Work Together
         </MagneticButton>
         <a

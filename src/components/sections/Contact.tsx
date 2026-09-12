@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { contact, person } from "@/lib/content/site";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { RevealText } from "@/components/ui/RevealText";
@@ -28,10 +29,16 @@ export function Contact() {
             </h2>
           </RevealText>
 
-          <RevealText delay={0.15} className="mt-10">
+          <RevealText delay={0.15} className="mt-10 flex flex-wrap items-center gap-6">
             <MagneticButton href={contact.cta.href} size="lg">
               {contact.cta.label}
             </MagneticButton>
+            <Link
+              href="/contact"
+              className="text-sm font-medium text-muted underline decoration-line underline-offset-4 transition-colors hover:text-accent-soft hover:decoration-accent-soft"
+            >
+              Full contact details →
+            </Link>
           </RevealText>
         </div>
 

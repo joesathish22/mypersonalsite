@@ -36,7 +36,7 @@ export function Navbar() {
           className="container-page flex h-18 items-center justify-between py-4"
         >
           <Link
-            href="#home"
+            href="/"
             className="text-sm font-semibold tracking-tight text-foreground"
             data-cursor="interactive"
           >
@@ -44,7 +44,7 @@ export function Navbar() {
             <span className="ml-2 text-muted-dim">/ QTT</span>
           </Link>
 
-          <ul className="hidden items-center gap-8 lg:flex">
+          <ul className="hidden items-center gap-5 lg:flex xl:gap-8">
             {nav.map((item) => (
               <li key={item.href}>
                 <Link
@@ -60,7 +60,7 @@ export function Navbar() {
           </ul>
 
           <div className="hidden lg:block">
-            <MagneticButton href="#contact" variant="secondary" className="!px-5 !py-2.5 !text-xs">
+            <MagneticButton href="/contact" variant="secondary" className="!px-5 !py-2.5 !text-xs">
               Let&apos;s Connect
             </MagneticButton>
           </div>

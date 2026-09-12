@@ -3,10 +3,10 @@ import { RevealText } from "./RevealText";
 
 type SectionHeadingProps = {
   eyebrow?: string;
-  lines: string[];
+  lines: readonly string[];
   align?: "left" | "center";
   className?: string;
-  as?: "h2" | "h3";
+  as?: "h1" | "h2" | "h3";
 };
 
 export function SectionHeading({

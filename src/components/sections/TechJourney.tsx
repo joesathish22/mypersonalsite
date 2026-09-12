@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { ScrollTrigger } from "@/lib/animation/gsap";
@@ -183,6 +184,13 @@ function PinnedTechJourney() {
         ))}
       </div>
 
+      <Link
+        href="/capabilities"
+        className="absolute bottom-10 right-6 z-10 text-xs font-medium text-foreground/80 underline decoration-line underline-offset-4 transition-colors hover:text-accent-soft hover:decoration-accent-soft sm:right-10"
+      >
+        Full capabilities →
+      </Link>
+
       <span className="sr-only">
         {techJourney.stages.map((stage) => `${stage.label}: ${stage.description}`).join(". ")}
       </span>
@@ -230,6 +238,15 @@ function StaticTechJourney() {
             </RevealText>
           ))}
         </div>
+
+        <RevealText delay={0.15} className="mt-10">
+          <Link
+            href="/capabilities"
+            className="text-sm font-medium text-accent-soft underline decoration-line underline-offset-4 transition-colors hover:decoration-accent-soft"
+          >
+            Full capabilities →
+          </Link>
+        </RevealText>
       </div>
     </section>
   );

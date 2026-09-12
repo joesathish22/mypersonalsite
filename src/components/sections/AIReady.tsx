@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { aiReady } from "@/lib/content/site";
 import { RevealText } from "@/components/ui/RevealText";
 
@@ -52,6 +53,15 @@ export function AIReady() {
               </li>
             ))}
           </ul>
+        </RevealText>
+
+        <RevealText delay={0.2} className="mt-8">
+          <Link
+            href="/ai"
+            className="text-sm font-medium text-accent-soft underline decoration-line underline-offset-4 transition-colors hover:decoration-accent-soft"
+          >
+            Explore AI & Intelligent Systems →
+          </Link>
         </RevealText>
       </div>
     </section>

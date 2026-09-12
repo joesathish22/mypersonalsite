@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { selectedWork } from "@/lib/content/site";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { TiltCard } from "@/components/ui/TiltCard";
@@ -61,6 +62,15 @@ export function SelectedWork() {
             );
           })}
         </ul>
+
+        <RevealText delay={0.2} className="mt-10">
+          <Link
+            href="/work"
+            className="text-sm font-medium text-accent-soft underline decoration-line underline-offset-4 transition-colors hover:decoration-accent-soft"
+          >
+            View the full Work page →
+          </Link>
+        </RevealText>
       </div>
     </section>
   );

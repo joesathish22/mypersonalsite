@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { about, person } from "@/lib/content/site";
 import { RevealText } from "@/components/ui/RevealText";
 
@@ -50,6 +51,15 @@ export function About() {
               </RevealText>
             ))}
           </div>
+
+          <RevealText delay={0.25} className="mt-8">
+            <Link
+              href="/about"
+              className="text-sm font-medium text-accent-soft underline decoration-line underline-offset-4 transition-colors hover:decoration-accent-soft"
+            >
+              Read the full story →
+            </Link>
+          </RevealText>
         </div>
       </div>
     </section>

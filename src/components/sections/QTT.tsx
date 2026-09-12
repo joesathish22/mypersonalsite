@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { qtt, person } from "@/lib/content/site";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { RevealText } from "@/components/ui/RevealText";
@@ -53,10 +54,19 @@ export function QTTSection() {
               </p>
             </RevealText>
 
-            <RevealText delay={0.25} className="mt-10 flex justify-center lg:justify-start">
+            <RevealText
+              delay={0.25}
+              className="mt-10 flex flex-col items-center gap-4 lg:items-start"
+            >
               <MagneticButton href={qtt.cta.href} external>
                 {qtt.cta.label}
               </MagneticButton>
+              <Link
+                href="/about"
+                className="text-sm font-medium text-muted underline decoration-line underline-offset-4 transition-colors hover:text-accent-soft hover:decoration-accent-soft"
+              >
+                My role at QTT →
+              </Link>
             </RevealText>
           </div>
 

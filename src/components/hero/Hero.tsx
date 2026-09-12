@@ -95,12 +95,12 @@ export function Hero() {
           </RevealText>
 
           <RevealText delay={0.04}>
-            <p className="mt-5 text-base font-semibold tracking-tight text-foreground sm:text-lg">
+            <h1 className="mt-5 text-base font-semibold tracking-tight text-foreground sm:text-lg">
               {hero.title}
-            </p>
+            </h1>
           </RevealText>
 
-          <h1 className="mt-3 text-balance text-4xl font-bold leading-[1.06] tracking-tight text-foreground sm:text-5xl lg:text-6xl xl:text-[4.25rem]">
+          <p className="mt-3 text-balance text-4xl font-bold leading-[1.06] tracking-tight text-foreground sm:text-5xl lg:text-6xl xl:text-[4.25rem]">
             {hero.statementLines.map((line, index) => (
               <RevealText key={line} as="span" className="block" delay={0.08 + index * 0.07}>
                 {line === hero.statementHighlight ? (
@@ -110,7 +110,7 @@ export function Hero() {
                 )}
               </RevealText>
             ))}
-          </h1>
+          </p>
 
           <RevealText delay={0.32} className="mt-6 space-y-1">
             <p className="text-lg font-medium text-foreground">{hero.subline}</p>
