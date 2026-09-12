@@ -7,7 +7,7 @@
  * Until then this falls back to the current Vercel deployment, per explicit
  * instruction not to hard-code it in individual files.
  */
-export const SITE_URL = (process.env.SITE_URL || "https://mypersonalsite-coral.vercel.app").replace(
+export const SITE_URL = (process.env.SITE_URL || "https://sathishkumar.pro").replace(
   /\/+$/,
   ""
 );
