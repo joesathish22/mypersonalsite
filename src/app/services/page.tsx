@@ -7,6 +7,7 @@ import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { RevealText } from "@/components/ui/RevealText";
 import { MagneticButton } from "@/components/ui/MagneticButton";
+import { DeepPageVisual } from "@/components/layout/DeepPageVisual";
 
 export const metadata: Metadata = buildMetadata({
   path: "/services",
@@ -24,13 +25,20 @@ export default function ServicesPage() {
       <Breadcrumbs items={[{ name: "Services", path: "/services" }]} />
 
       <section className="relative bg-void pb-16 pt-10 sm:pb-20">
-        <div className="container-page">
-          <SectionHeading as="h1" eyebrow={services.eyebrow} lines={services.heading} className="max-w-3xl" />
-          <RevealText delay={0.1}>
-            <p className="mt-6 max-w-2xl text-balance text-lg leading-relaxed text-muted sm:text-xl">
-              {services.intro}
-            </p>
-          </RevealText>
+        <div className="container-page grid grid-cols-1 items-center gap-10 lg:grid-cols-[1fr_1fr] lg:gap-12 xl:grid-cols-[0.9fr_1.1fr]">
+          <div>
+            <SectionHeading as="h1" eyebrow={services.eyebrow} lines={services.heading} />
+            <RevealText delay={0.1}>
+              <p className="mt-6 max-w-xl text-balance text-lg leading-relaxed text-muted sm:text-xl">
+                {services.intro}
+              </p>
+            </RevealText>
+          </div>
+
+          <DeepPageVisual
+            variant="services"
+            className="relative mx-auto aspect-square w-full max-w-sm sm:max-w-md lg:aspect-auto lg:h-[26rem] lg:max-w-none xl:h-[30rem]"
+          />
         </div>
       </section>
 

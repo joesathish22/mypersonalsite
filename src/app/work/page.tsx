@@ -13,6 +13,7 @@ import {
   CloudDiagram,
   TransformDiagram,
 } from "@/components/ui/WorkDiagrams";
+import { DeepPageVisual } from "@/components/layout/DeepPageVisual";
 
 const diagrams = [EnterpriseDiagram, MobileDiagram, CloudDiagram, TransformDiagram];
 
@@ -29,13 +30,24 @@ export default function WorkPage() {
       <Breadcrumbs items={[{ name: "Work", path: "/work" }]} />
 
       <section className="relative bg-void pb-16 pt-10 sm:pb-20">
-        <div className="container-page">
-          <SectionHeading as="h1" eyebrow={selectedWork.eyebrow} lines={["Enterprise Software Development", "& Digital Transformation"]} className="max-w-3xl" />
-          <RevealText delay={0.1}>
-            <p className="mt-6 max-w-2xl text-balance text-lg leading-relaxed text-muted sm:text-xl">
-              {selectedWork.subheading}
-            </p>
-          </RevealText>
+        <div className="container-page grid grid-cols-1 items-center gap-10 lg:grid-cols-[1fr_1fr] lg:gap-12 xl:grid-cols-[0.9fr_1.1fr]">
+          <div>
+            <SectionHeading
+              as="h1"
+              eyebrow={selectedWork.eyebrow}
+              lines={["Enterprise Software Development", "& Digital Transformation"]}
+            />
+            <RevealText delay={0.1}>
+              <p className="mt-6 max-w-xl text-balance text-lg leading-relaxed text-muted sm:text-xl">
+                {selectedWork.subheading}
+              </p>
+            </RevealText>
+          </div>
+
+          <DeepPageVisual
+            variant="work"
+            className="relative mx-auto aspect-square w-full max-w-sm sm:max-w-md lg:aspect-auto lg:h-[26rem] lg:max-w-none xl:h-[30rem]"
+          />
         </div>
       </section>
 
